@@ -1,0 +1,2 @@
+SolastaRangerArcanistRangerSubclass/&FancySkeletonTitle	Fancy Skeleton
+SolastaRangerArcanistRangerSubclass/&FancySkeletonDescription	I'm a fancy skeleton
