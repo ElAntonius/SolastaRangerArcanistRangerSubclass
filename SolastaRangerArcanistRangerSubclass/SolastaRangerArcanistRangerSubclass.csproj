@@ -12,7 +12,7 @@
 		<Authors>Zappastuff</Authors>
 		<Company />
 		<Product />
-		<Copyright>Copyright © 2020</Copyright>
+		<Copyright>Copyright ï¿½ 2020</Copyright>
 		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
 		<Version>0.0.2</Version>
 	</PropertyGroup>
@@ -45,6 +45,10 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<Reference Include="SolastaModHelpers">
+			<HintPath>$([System.IO.Path]::Combine($(SolastaInstallDir), 'Mods\SolastaModHelpers\SolastaModHelpers.dll'))</HintPath>
+			<Private>false</Private>
+		</Reference>
 		<Reference Include="Unity.Addressables">
 			<HintPath>$([System.IO.Path]::Combine($(SolastaInstallDir), 'Solasta_Data\Managed\Unity.Addressables.dll'))</HintPath>
 			<Private>false</Private>

@@ -1,2 +1,12 @@
-SolastaRangerArcanistRangerSubclass/&FancySkeletonTitle	Fancy Skeleton
-SolastaRangerArcanistRangerSubclass/&FancySkeletonDescription	I'm a fancy skeleton
+Subclass/&RangerArcanistRangerSubclassTitle	Ranger Arcanist
+Subclass/&RangerArcanistRangerSubclassDescription	The Ranger Arcanist melds their ranger skills with a arcane tricks. Their weapons can afflict their opponents with the Arcanist's Mark, and have learned how to cast some Wizard spells as part of their Ranger spell repertoire.
+Feature/&RangerArcanistAutoPreparedSpellsFeatureTitle	FeatTitle
+Feature/&RangerArcanistAutoPreparedSpellsFeatureDescription	FeatDesc
+Feature/&RangerArcanistMagicAffinityFeatureTitle	Magic Affinity
+Feature/&RangerArcanistMagicAffinityFeatureDescription	MagicAffinity Desc
+Feature/&RangerArcanistSpellListTitle	Spell List
+Feature/&RangerArcanistSpellListDescription	Spell List Desc
+Feature/&ArcanistMarkSpellTitle	SpellTitle
+Feature/&ArcanistMarkSpellDescription	SpellDesc
+Feature/&ArcanistMarkConditionTitle	CondTitle
+Feature/&ArcanistMarkConditionDescription	CondDesc
