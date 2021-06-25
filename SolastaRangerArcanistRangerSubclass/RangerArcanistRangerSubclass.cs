@@ -29,36 +29,65 @@ namespace SolastaRangerArcanistRangerSubclass
 
             var definition = new CharacterSubclassDefinitionBuilder(RangerArcanistRangerSubclassName, RangerArcanistRangerSubclassGuid)
                     .SetGuiPresentation(subclassGuiPresentation)
-                    .AddFeatureAtLevel(createArcanistBonusSpells(), 3)
+                    .AddFeatureAtLevel(createRangerArcanistMagic(), 3)
                     .AddToDB();
 
             DatabaseHelper.FeatureDefinitionSubclassChoices.SubclassChoiceRangerArchetypes.Subclasses.Add(definition.Name);
         }
 
-        static FeatureDefinition createArcanistBonusSpells()
+        static FeatureDefinition createRangerArcanistMagic()
         {
-            var bonus_spells = Helpers.FeatureBuilder<NewFeatureDefinitions.FeatureDefinitionExtraSpellsKnown>.createFeature
-                               (
-                                   "RangerArcanistBonusSpells",
-                                   GuidHelper.Create(RA_BASE_GUID, "RangerArcanistBonusSpells").ToString(),
-                                   Common.common_no_title,
-                                   Common.common_no_title,
-                                   null,
-                                   b =>
-                                   {
-                                       b.caster_class = DatabaseHelper.CharacterClassDefinitions.Ranger;
-                                       b.level = 3;
-                                       b.max_spells = 2;
-                                   }
-                               );
-
-
-            return Helpers.FeatureBuilder<NewFeatureDefinitions.GrantSpells>.createFeature
+            var bonus_spells_lv3 = Helpers.FeatureBuilder<NewFeatureDefinitions.FeatureDefinitionExtraSpellsKnown>.createFeature
             (
-                "RangerArcanistBonusSpellsFeature",
-                GuidHelper.Create(RA_BASE_GUID, "RangerArcanistBonusSpellFeature").ToString(),
-                "Feature/&RangerArcanistBonusSpellsTitle",
-                "Feature/&RangerArcanistBonusSpellsDescription",
+                "RangerArcanistBonusSpellsLv3",
+                GuidHelper.Create(RA_BASE_GUID, "RangerArcanistBonusSpellsLv3").ToString(),
+                Common.common_no_title,
+                Common.common_no_title,
+                null,
+                bonus =>
+                {
+                    bonus.caster_class = DatabaseHelper.CharacterClassDefinitions.Ranger;
+                    bonus.level = 3;
+                    bonus.max_spells = 1;
+                }
+            );
+
+            var bonus_spells_lv5 = Helpers.FeatureBuilder<NewFeatureDefinitions.FeatureDefinitionExtraSpellsKnown>.createFeature
+            (
+                "RangerArcanistBonusSpellsLv5",
+                GuidHelper.Create(RA_BASE_GUID, "RangerArcanistBonusSpellsLv5").ToString(),
+                Common.common_no_title,
+                Common.common_no_title,
+                null,
+                bonus =>
+                {
+                    bonus.caster_class = DatabaseHelper.CharacterClassDefinitions.Ranger;
+                    bonus.level = 5;
+                    bonus.max_spells = 1;
+                }
+            );
+
+            var bonus_spells_lv9 = Helpers.FeatureBuilder<NewFeatureDefinitions.FeatureDefinitionExtraSpellsKnown>.createFeature
+            (
+                "RangerArcanistBonusSpellsLv9",
+                GuidHelper.Create(RA_BASE_GUID, "RangerArcanistBonusSpellsLv9").ToString(),
+                Common.common_no_title,
+                Common.common_no_title,
+                null,
+                bonus =>
+                {
+                    bonus.caster_class = DatabaseHelper.CharacterClassDefinitions.Ranger;
+                    bonus.level = 9;
+                    bonus.max_spells = 1;
+                }
+            );
+
+            var extra_spells = Helpers.FeatureBuilder<NewFeatureDefinitions.GrantSpells>.createFeature
+            (
+                "RangerArcanistExtraSpells",
+                GuidHelper.Create(RA_BASE_GUID, "RangerArcanistExtraSpells").ToString(),
+                Common.common_no_title,
+                Common.common_no_title,
                 null,
                 feature =>
                 {
@@ -72,10 +101,47 @@ namespace SolastaRangerArcanistRangerSubclass
                             {
                                 DatabaseHelper.SpellDefinitions.Shield
                             }
+                        },
+                        new FeatureDefinitionAutoPreparedSpells.AutoPreparedSpellsGroup()
+                        {
+                            ClassLevel = 5,
+                            SpellsList = new List<SpellDefinition>()
+                            {
+                                DatabaseHelper.SpellDefinitions.MistyStep
+                            }
+                        },
+                        new FeatureDefinitionAutoPreparedSpells.AutoPreparedSpellsGroup()
+                        {
+                            ClassLevel = 9,
+                            SpellsList = new List<SpellDefinition>()
+                            {
+                                DatabaseHelper.SpellDefinitions.Counterspell
+                            }
                         }
-
                     };
                 }
+            );
+
+            var arcanist_affinity = Helpers.CopyFeatureBuilder<FeatureDefinitionMagicAffinity>.createFeatureCopy
+            (
+                "RangerArcanistAffinity",
+                GuidHelper.Create(RA_BASE_GUID, "RangerArcanistAffinity").ToString(),
+                Common.common_no_title,
+                Common.common_no_title,
+                null,
+                DatabaseHelper.FeatureDefinitionMagicAffinitys.MagicAffinityBattleMagic
+            );
+
+            return Helpers.FeatureSetBuilder.createFeatureSet
+            (
+                "RangerArcanistMagic",
+                GuidHelper.Create(RA_BASE_GUID, "RangerArcanistManaTouchedGuardian").ToString(),
+                "Feature/&RangerArcanistBonusSpellsTitle",
+                "Feature/&RangerArcanistBonusSpellsDescription",
+                false,
+                FeatureDefinitionFeatureSet.FeatureSetMode.Union,
+                false,
+                extra_spells, bonus_spells_lv3, bonus_spells_lv5, bonus_spells_lv9, arcanist_affinity
             );
         }
     }
@@ -160,77 +226,6 @@ namespace SolastaRangerArcanistRangerSubclass
         public static FeatureDefinitionAdditionalAction RangerArcanistFastSpellAction = CreateAndAddToDB(RangerArcanistFastSpellActionName, GuidHelper.Create(RangerArcanistRangerSubclass.RA_BASE_GUID, RangerArcanistFastSpellActionName).ToString());
     }
 
-    internal class RangerArcanistCastSpellFeatureBuilder : BaseDefinitionBuilder<FeatureDefinitionCastSpell>
-    {
-        const string RangerArcanistCastSpellFeatureName = "RangerArcanistCastSpellFeature";
-
-        protected RangerArcanistCastSpellFeatureBuilder(string name, string guid) : base(DatabaseHelper.FeatureDefinitionCastSpells.CastSpellRanger, name, guid)
-        {
-            Definition.GuiPresentation.Title       = "Feature/&RangerArcanistCastSpellFeatureTitle";
-            Definition.GuiPresentation.Description = "Feature/&RangerArcanistCastSpellFeatureDescription";
-
-            Definition.SetSpellCastingOrigin(FeatureDefinitionCastSpell.CastingOrigin.Subclass);
-            /*Definition.SpellListDefinition.SpellsByLevel.Add(new SpellListDefinition.SpellsByLevelDuplet
-            {
-                Level = 1,
-                Spells = new List<SpellDefinition>
-                {
-                    ArcanistMarkSpellBuilder.ArcanistMarkSpell,
-                    DatabaseHelper.SpellDefinitions.Shield
-                }
-            });
-            Definition.SetSpellListDefinition(RangerArcanistSpellListBuilder.RangerArcanistSpellList);
-            Definition.SetSpellKnowledge(RuleDefinitions.SpellKnowledge.FixedList);
-            Definition.SetSpellReadyness(RuleDefinitions.SpellReadyness.AllKnown);
-        }
-
-        public static FeatureDefinitionCastSpell CreateAndAddToDB(string name, string guid)
-           => new RangerArcanistCastSpellFeatureBuilder(name, guid).AddToDB();
-        //public static FeatureDefinitionCastSpell CreateAndAddToDB(CharacterClassDefinition characterClass)
-        //       => new RangerArcanistCastSpellFeatureBuilder(characterClass, RangerArcanistCastSpellFeatureName + characterClass.Name, GuidHelper.Create(RangerArcanistRangerSubclass.RA_BASE_GUID, RangerArcanistCastSpellFeatureName + characterClass.Name).ToString()).AddToDB();
-
-        public static FeatureDefinitionCastSpell RangerArcanistCastSpellFeature = CreateAndAddToDB(RangerArcanistCastSpellFeatureName, GuidHelper.Create(RangerArcanistRangerSubclass.RA_BASE_GUID, RangerArcanistCastSpellFeatureName).ToString());
-        //public static FeatureDefinitionCastSpell GetOrAdd(CharacterClassDefinition characterClass)
-        //{
-        //    var db = DatabaseRepository.GetDatabase<FeatureDefinitionCastSpell>();
-        //    return db.TryGetElement(RangerArcanistCastSpellFeatureName + characterClass.Name, GuidHelper.Create(RangerArcanistRangerSubclass.RA_BASE_GUID, RangerArcanistCastSpellFeatureName + characterClass.Name).ToString()) ?? CreateAndAddToDB(characterClass);
-        //}
-    }
-
-    internal class RangerArcanistAutoPreparedSpellsFeatureBuilder : BaseDefinitionBuilder<FeatureDefinitionAutoPreparedSpells>
-    {
-        const string RangerArcanistAutoPreparedSpellsFeatureName = "RangerArcanistAutoPreparedSpellsFeature";
-
-        protected RangerArcanistAutoPreparedSpellsFeatureBuilder(CharacterClassDefinition characterClass, string name, string guid) : base(name, guid)
-        {
-            Definition.GuiPresentation.Title = "Feature/&RangerArcanistAutoPreparedSpellsFeatureTitle";
-            Definition.GuiPresentation.Description = "Feature/&RangerArcanistAutoPreparedSpellsFeatureDescription";
-
-            Definition.SetSpellcastingClass(characterClass);
-            Definition.AutoPreparedSpellsGroups.Clear();
-            Definition.AutoPreparedSpellsGroups.Add(new FeatureDefinitionAutoPreparedSpells.AutoPreparedSpellsGroup
-            {
-                ClassLevel = 0,
-                SpellsList = new List<SpellDefinition>
-                {
-                    ArcanistMarkSpellBuilder.ArcanistMarkSpell,
-                    DatabaseHelper.SpellDefinitions.Shield
-                }
-            });
-        }
-
-        //public static FeatureDefinitionAutoPreparedSpells CreateAndAddToDB(string name, string guid)
-        //    => new RangerArcanistAutoPreparedSpellsFeatureBuilder(name, guid).AddToDB();
-
-        public static FeatureDefinitionAutoPreparedSpells CreateAndAddToDB(CharacterClassDefinition characterClass)
-               => new RangerArcanistAutoPreparedSpellsFeatureBuilder(characterClass, RangerArcanistAutoPreparedSpellsFeatureName + characterClass.Name, GuidHelper.Create(RangerArcanistRangerSubclass.RA_BASE_GUID, RangerArcanistAutoPreparedSpellsFeatureName + characterClass.Name).ToString()).AddToDB();
-        //public static FeatureDefinitionAutoPreparedSpells RangerArcanistAutoPreparedSpellsFeature = CreateAndAddToDB(RangerArcanistAutoPreparedSpellsFeatureName, GuidHelper.Create(RangerArcanistRangerSubclass.RA_BASE_GUID, RangerArcanistAutoPreparedSpellsFeatureName).ToString());
-        public static FeatureDefinitionAutoPreparedSpells GetOrAdd(CharacterClassDefinition characterClass)
-        {
-            var db = DatabaseRepository.GetDatabase<FeatureDefinitionAutoPreparedSpells>();
-            return db.TryGetElement(RangerArcanistAutoPreparedSpellsFeatureName + characterClass.Name, GuidHelper.Create(RangerArcanistRangerSubclass.RA_BASE_GUID, RangerArcanistAutoPreparedSpellsFeatureName + characterClass.Name).ToString()) ?? CreateAndAddToDB(characterClass);
-        }
-    }
 
     internal class RangerArcanistMagicAffinityFeatureBuilder : BaseDefinitionBuilder<FeatureDefinitionMagicAffinity>
     {
