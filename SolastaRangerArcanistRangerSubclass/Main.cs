@@ -6,6 +6,7 @@ using UnityModManagerNet;
 using HarmonyLib;
 using I2.Loc;
 using SolastaModApi;
+using SolastaModHelpers;
 
 namespace SolastaRangerArcanistRangerSubclass
 {

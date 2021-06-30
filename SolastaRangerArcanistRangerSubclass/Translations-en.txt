@@ -10,3 +10,7 @@ Feature/&ArcanistMarkSpellTitle	SpellTitle
 Feature/&ArcanistMarkSpellDescription	SpellDesc
 Feature/&ArcanistMarkConditionTitle	CondTitle
 Feature/&ArcanistMarkConditionDescription	CondDesc
+Condition/&ConditionMarkedByArcanistTitle	Arcanist's Mark
+Condition/&ConditionMarkedByArcanistDescription	Arcanist's Mark
+Feedback/&AdditionalDamageArcanistMarkLine	Arcanist's Mark deals extra damage to the target!
+Feedback/&AdditionalDamageArcanistMarkFormat Arcanist's Mark!
