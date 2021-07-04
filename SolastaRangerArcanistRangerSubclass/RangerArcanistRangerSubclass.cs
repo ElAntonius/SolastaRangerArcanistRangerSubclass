@@ -24,6 +24,7 @@ namespace SolastaRangerArcanistRangerSubclass
         static public FeatureDefinitionFeatureSet ranger_arcanist_magic = createRangerArcanistMagic();
         static public FeatureDefinitionAdditionalDamage arcanist_mark = createArcanistMark();
         static public FeatureDefinitionAdditionalDamage arcane_detonation = createArcaneDetonation();
+        static public FeatureDefinition arcane_detonation_upgrade = createArcaneDetonationUpgrade();
         static public Dictionary<int, FeatureDefinitionPower> arcane_pulse_dict = createArcanePulseDict();
 
         public static void BuildAndAddSubclass()
@@ -40,6 +41,7 @@ namespace SolastaRangerArcanistRangerSubclass
                     .AddFeatureAtLevel(arcanist_mark, 3)
                     .AddFeatureAtLevel(arcane_detonation, 3)
                     .AddFeatureAtLevel(arcane_pulse_dict[7], 7)
+                    .AddFeatureAtLevel(arcane_detonation_upgrade, 11)
                     .AddFeatureAtLevel(arcane_pulse_dict[15], 15)
                     .AddToDB();
 
@@ -227,6 +229,21 @@ namespace SolastaRangerArcanistRangerSubclass
             return mark_damage;
         }
 
+        static FeatureDefinition createArcaneDetonationUpgrade()
+        {
+            // This is a blank feature. It does nothing except create a description for what happens at level 11.
+            var blank_feature = Helpers.FeatureBuilder<FeatureDefinition>.createFeature
+            (
+                "AdditionalDamageArcaneDetonationUpgrade",
+                GuidHelper.Create(RA_BASE_GUID, "AdditionalDamageArcaneDetonationUpgrade").ToString(),
+                "Feature/&ArcaneDetonationUpgradeTitle",
+                "Feature/&ArcaneDetonationUpgradeDescription",
+                null
+            );
+
+            return blank_feature;
+        }
+
         static Dictionary<int, FeatureDefinitionPower> createArcanePulseDict()
         {
             var marked_effect = new EffectForm();
@@ -255,8 +272,9 @@ namespace SolastaRangerArcanistRangerSubclass
             pulse_description.EffectForms.Clear();
             pulse_description.EffectForms.AddRange(new List<EffectForm>
             {
-                marked_effect,
-                damage_effect
+                damage_effect,
+                marked_effect
+                
             });
 
             var arcane_pulse_action = Helpers.PowerBuilder.createPower
@@ -299,8 +317,8 @@ namespace SolastaRangerArcanistRangerSubclass
             pulse_upgrade_description.EffectForms.Clear();
             pulse_upgrade_description.EffectForms.AddRange(new List<EffectForm>
             {
-                marked_effect,
-                damage_upgrade_effect
+                damage_upgrade_effect,
+                marked_effect
             });
 
             var arcane_pulse_upgrade_action = Helpers.PowerBuilder.createPower
