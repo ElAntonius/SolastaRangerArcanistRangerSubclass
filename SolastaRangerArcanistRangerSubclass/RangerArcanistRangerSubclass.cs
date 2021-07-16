@@ -114,7 +114,7 @@ namespace SolastaRangerArcanistRangerSubclass
             return Helpers.FeatureSetBuilder.createFeatureSet
             (
                 "RangerArcanistMagic",
-                GuidHelper.Create(RA_BASE_GUID, "RangerArcanistManaTouchedGuardian").ToString(),
+                GuidHelper.Create(RA_BASE_GUID, "RangerArcanistManaTouchedGuardian").ToString(), // Oops, will have to live with this name being off
                 "Feature/&RangerArcanistMagicTitle",
                 "Feature/&RangerArcanistMagicDescription",
                 false,
@@ -147,16 +147,15 @@ namespace SolastaRangerArcanistRangerSubclass
                     a.SetDamageValueDetermination(RuleDefinitions.AdditionalDamageValueDetermination.Die);
                     a.SetDamageAdvancement(RuleDefinitions.AdditionalDamageAdvancement.None);
                     a.SetDamageSaveAffinity(RuleDefinitions.EffectSavingThrowType.None);
-                }
-            );
-
-            mark_apply.ConditionOperations.Clear();
-            mark_apply.ConditionOperations.Add
-            (
-                new ConditionOperationDescription()
-                {
-                    ConditionDefinition = marked_condition,
-                    Operation = ConditionOperationDescription.ConditionOperation.Add
+                    a.ConditionOperations.Clear();
+                    a.ConditionOperations.Add
+                    (
+                        new ConditionOperationDescription()
+                        {
+                            ConditionDefinition = marked_condition,
+                            Operation = ConditionOperationDescription.ConditionOperation.Add
+                        }
+                    );
                 }
             );
 
