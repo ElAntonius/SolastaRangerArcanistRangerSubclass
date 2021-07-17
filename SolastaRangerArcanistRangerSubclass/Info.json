@@ -2,7 +2,7 @@
 	"Id": "SolastaRangerArcanistRangerSubclass",
 	"DisplayName": "SolastaRangerArcanistRangerSubclass",
 	"Author": "ElAntonius",
-	"Version": "1.0.0",
+	"Version": "1.1.0",
 	"ManagerVersion": "0.23.4",
 	"Requirements": [ "SolastaModApi", "SolastaModHelpers" ],
 	"LoadAfter": [ "SolastaModApi", "SolastaModHelpers" ],

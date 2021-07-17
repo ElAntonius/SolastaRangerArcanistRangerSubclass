@@ -187,7 +187,7 @@ namespace SolastaRangerArcanistRangerSubclass
                     a.SetDamageSaveAffinity(RuleDefinitions.EffectSavingThrowType.None);
                     a.SetDamageAdvancement(RuleDefinitions.AdditionalDamageAdvancement.ClassLevel);
                     a.SetLimitedUsage(RuleDefinitions.FeatureLimitedUsage.None);
-
+                    a.SetImpactParticle(DatabaseHelper.SpellDefinitions.MagicMissile.EffectDescription.EffectParticleParameters.ImpactParticle);
                     a.DiceByRankTable.Clear();
                     a.DiceByRankTable.AddRange(new List<DiceByRank>
                     {
@@ -259,6 +259,28 @@ namespace SolastaRangerArcanistRangerSubclass
             damage_effect.DamageForm.SetHealFromInflictedDamage(RuleDefinitions.HealFromInflictedDamage.Never);
             damage_effect.SavingThrowAffinity = RuleDefinitions.EffectSavingThrowType.None;
 
+            var damage_upgrade_effect = new EffectForm();
+            damage_upgrade_effect.DamageForm = new DamageForm();
+            damage_upgrade_effect.DamageForm.DamageType = "DamageForce";
+            damage_upgrade_effect.DamageForm.DieType = RuleDefinitions.DieType.D8;
+            damage_upgrade_effect.DamageForm.DiceNumber = 8;
+            damage_upgrade_effect.DamageForm.SetHealFromInflictedDamage(RuleDefinitions.HealFromInflictedDamage.Never);
+            damage_upgrade_effect.SavingThrowAffinity = RuleDefinitions.EffectSavingThrowType.None;
+
+            var arcane_pulse_action = createArcanePulse("ArcanePulse", "Feature/&ArcanePulseTitle", "Feature/&ArcanePulseDescription", marked_effect, damage_effect);
+
+            var arcane_pulse_upgrade_action = createArcanePulse("ArcanePulseUpgrade", "Feature/&ArcanePulseUpgradeTitle", "Feature/&ArcanePulseUpgradeDescription", marked_effect, damage_upgrade_effect);
+            arcane_pulse_upgrade_action.SetOverriddenPower(arcane_pulse_action);
+
+            var arcane_pulse_dict = new Dictionary<int, FeatureDefinitionPower>();
+            arcane_pulse_dict.Add(7, arcane_pulse_action);
+            arcane_pulse_dict.Add(15, arcane_pulse_upgrade_action);
+
+            return arcane_pulse_dict;
+        }
+
+        static FeatureDefinitionPower createArcanePulse(string name, string title, string description, EffectForm marked_effect, EffectForm damage_effect)
+        {
             var pulse_description = new EffectDescription();
             pulse_description.Copy(DatabaseHelper.SpellDefinitions.MagicMissile.EffectDescription);
             pulse_description.SetCreatedByCharacter(true);
@@ -273,81 +295,32 @@ namespace SolastaRangerArcanistRangerSubclass
             {
                 damage_effect,
                 marked_effect
-                
             });
 
-            var arcane_pulse_action = Helpers.PowerBuilder.createPower
+            return Helpers.FeatureBuilder<FeatureDefinitionPower>.createFeature
             (
-                "ArcanePulse",
-                GuidHelper.Create(RA_BASE_GUID, "ArcanePulse").ToString(),
-                "Feature/&ArcanePulseTitle",
-                "Feature/&ArcanePulseDescription",
+                name,
+                GuidHelper.Create(RA_BASE_GUID, name).ToString(),
+                title,
+                description,
                 DatabaseHelper.FeatureDefinitionPowers.PowerDomainElementalHeraldOfTheElementsThunder.GuiPresentation.SpriteReference,
-                DatabaseHelper.FeatureDefinitionPowers.PowerDomainElementalHeraldOfTheElementsThunder,
-                pulse_description,
-                RuleDefinitions.ActivationTime.Action,
-                0,
-                RuleDefinitions.UsesDetermination.AbilityBonusPlusFixed,
-                RuleDefinitions.RechargeRate.LongRest,
-                Helpers.Stats.Wisdom,
-                Helpers.Stats.Wisdom,
-                1,
-                false
+                a =>
+                {
+                    a.SetAbilityScore(Helpers.Stats.Wisdom);
+                    a.SetActivationTime(RuleDefinitions.ActivationTime.Action);
+                    a.SetCostPerUse(1);
+                    a.SetEffectDescription(pulse_description);
+                    a.SetFixedUsesPerRecharge(0);
+                    a.SetRechargeRate(RuleDefinitions.RechargeRate.LongRest);
+                    a.SetShortTitleOverride("Arcane Pulse");
+                    a.SetShowCasting(true);
+                    a.SetUsesAbilityScoreName(Helpers.Stats.Wisdom);
+                    a.SetUsesDetermination(RuleDefinitions.UsesDetermination.AbilityBonusPlusFixed);
+                }
             );
-            arcane_pulse_action.SetShortTitleOverride("Arcane Pulse");
-
-            var damage_upgrade_effect = new EffectForm();
-            damage_upgrade_effect.DamageForm = new DamageForm();
-            damage_upgrade_effect.DamageForm.DamageType = "DamageForce";
-            damage_upgrade_effect.DamageForm.DieType = RuleDefinitions.DieType.D8;
-            damage_upgrade_effect.DamageForm.DiceNumber = 8;
-            damage_upgrade_effect.DamageForm.SetHealFromInflictedDamage(RuleDefinitions.HealFromInflictedDamage.Never);
-            damage_upgrade_effect.SavingThrowAffinity = RuleDefinitions.EffectSavingThrowType.None;
-
-            var pulse_upgrade_description = new EffectDescription();
-            pulse_upgrade_description.Copy(DatabaseHelper.SpellDefinitions.MagicMissile.EffectDescription);
-            pulse_upgrade_description.SetCreatedByCharacter(true);
-            pulse_upgrade_description.SetTargetSide(RuleDefinitions.Side.Enemy);
-            pulse_upgrade_description.SetTargetType(RuleDefinitions.TargetType.Sphere);
-            pulse_upgrade_description.SetTargetParameter(3);
-            pulse_upgrade_description.SetRangeType(RuleDefinitions.RangeType.Distance);
-            pulse_upgrade_description.SetRangeParameter(30);
-
-            pulse_upgrade_description.EffectForms.Clear();
-            pulse_upgrade_description.EffectForms.AddRange(new List<EffectForm>
-            {
-                damage_upgrade_effect,
-                marked_effect
-            });
-
-            var arcane_pulse_upgrade_action = Helpers.PowerBuilder.createPower
-            (
-                "ArcanePulseUpgrade",
-                GuidHelper.Create(RA_BASE_GUID, "ArcanePulseUpgrade").ToString(),
-                "Feature/&ArcanePulseUpgradeTitle",
-                "Feature/&ArcanePulseUpgradeDescription",
-                DatabaseHelper.FeatureDefinitionPowers.PowerDomainElementalHeraldOfTheElementsThunder.GuiPresentation.SpriteReference,
-                DatabaseHelper.FeatureDefinitionPowers.PowerDomainElementalHeraldOfTheElementsThunder,
-                pulse_upgrade_description,
-                RuleDefinitions.ActivationTime.Action,
-                0,
-                RuleDefinitions.UsesDetermination.AbilityBonusPlusFixed,
-                RuleDefinitions.RechargeRate.LongRest,
-                Helpers.Stats.Wisdom,
-                Helpers.Stats.Wisdom,
-                1,
-                false
-            );
-            arcane_pulse_upgrade_action.SetShortTitleOverride("Arcanist's Blast");
-            arcane_pulse_upgrade_action.SetOverriddenPower(arcane_pulse_action);
-
-            var arcane_pulse_dict = new Dictionary<int, FeatureDefinitionPower>();
-            arcane_pulse_dict.Add(7, arcane_pulse_action);
-            arcane_pulse_dict.Add(15, arcane_pulse_upgrade_action);
-
-            return arcane_pulse_dict;
         }
     }
+
 
     // Creates a dedicated builder for the marked by arcanist condition. This helps with GUID wonkiness on the fact that separate features interact with it.
     internal class ConditionMarkedByArcanistBuilder : BaseDefinitionBuilder<ConditionDefinition>
