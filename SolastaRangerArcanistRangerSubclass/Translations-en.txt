@@ -9,9 +9,7 @@ Feature/&ArcaneDetonationDescription	When you hit a creature that has your Arcan
 Feature/&ArcaneDetonationUpgradeTitle	Greater Arcane Detonation
 Feature/&ArcaneDetonationUpgradeDescription	Starting at 11th level, the damage from your Arcane Detonation increases to 2d6.
 Feature/&ArcanePulseTitle	Arcane Pulse
-Feature/&ArcanePulseDescription	Starting at 7th level, you can cause an eruption of arcane energy at a range of 30 feet. Hostile creatures within 15 feet of the point of impact take 4d8 damage and gain an Arcanist's Mark. You may use this ability a number of times equal to your wisdom modifier per long rest.
-Feature/&ArcanePulseUpgradeTitle	Greater Arcane Pulse
-Feature/&ArcanePulseUpgradeDescription	Starting at 15th level, the damage of your Arcane Pulse increases to 8d8.
+Feature/&ArcanePulseDescription	Starting at 7th level, you can cause an eruption of arcane energy at a range of 30 feet. Hostile creatures within 15 feet of the point of impact take 4d8 damage and gain an Arcanist's Mark. You may use this ability a number of times equal to your wisdom modifier per long rest. At 15th level, the damage of your Arcane Pulse increases to 8d8.
 Feedback/&AdditionalDamageArcanistMarkLine	Arcanist's Mark detonates and deals extra damage to the target!
 Feedback/&AdditionalDamageArcanistMarkFormat Arcanist's Mark!
 Condition/&ConditionMarkedByArcanistTitle	Arcanist's Mark

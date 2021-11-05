@@ -187,7 +187,8 @@ namespace SolastaRangerArcanistRangerSubclass
                     a.SetDamageSaveAffinity(RuleDefinitions.EffectSavingThrowType.None);
                     a.SetDamageAdvancement(RuleDefinitions.AdditionalDamageAdvancement.ClassLevel);
                     a.SetLimitedUsage(RuleDefinitions.FeatureLimitedUsage.None);
-                    a.SetImpactParticle(DatabaseHelper.SpellDefinitions.MagicMissile.EffectDescription.EffectParticleParameters.ImpactParticle);
+                    //a.SetImpactParticle(DatabaseHelper.SpellDefinitions.MagicMissile.EffectDescription.EffectParticleParameters.ImpactParticle);
+                    //a.SetImpactParticleReference(DatabaseHelper.);
                     a.DiceByRankTable.Clear();
                     a.DiceByRankTable.AddRange(new List<DiceByRank>
                     {
@@ -219,7 +220,7 @@ namespace SolastaRangerArcanistRangerSubclass
                         new ConditionOperationDescription()
                         {
                             ConditionDefinition = marked_condition,
-                            Operation = ConditionOperationDescription.ConditionOperation.Remove
+                            //Operation = ConditionOperationDescription.ConditionOperation.Remove
                         }
                     );
                 }
@@ -269,7 +270,7 @@ namespace SolastaRangerArcanistRangerSubclass
 
             var arcane_pulse_action = createArcanePulse("ArcanePulse", "Feature/&ArcanePulseTitle", "Feature/&ArcanePulseDescription", marked_effect, damage_effect);
 
-            var arcane_pulse_upgrade_action = createArcanePulse("ArcanePulseUpgrade", "Feature/&ArcanePulseUpgradeTitle", "Feature/&ArcanePulseUpgradeDescription", marked_effect, damage_upgrade_effect);
+            var arcane_pulse_upgrade_action = createArcanePulse("ArcanePulseUpgrade", "Feature/&ArcanePulseTitle", "Feature/&ArcanePulseDescription", marked_effect, damage_upgrade_effect);
             arcane_pulse_upgrade_action.SetOverriddenPower(arcane_pulse_action);
 
             var arcane_pulse_dict = new Dictionary<int, FeatureDefinitionPower>();
