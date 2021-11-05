@@ -166,6 +166,9 @@ namespace SolastaRangerArcanistRangerSubclass
         {
             var marked_condition = ConditionMarkedByArcanistBuilder.GetOrAdd();
 
+            var asset_reference = new AssetReference();
+            asset_reference.SetField("m_AssetGUID", "9f1fe10e6ef8c9c43b6b2ef91b2ad38a");
+
             var mark_damage = Helpers.CopyFeatureBuilder<FeatureDefinitionAdditionalDamage>.createFeatureCopy
             (
                 "AdditionalDamageArcaneDetonation",
@@ -187,8 +190,7 @@ namespace SolastaRangerArcanistRangerSubclass
                     a.SetDamageSaveAffinity(RuleDefinitions.EffectSavingThrowType.None);
                     a.SetDamageAdvancement(RuleDefinitions.AdditionalDamageAdvancement.ClassLevel);
                     a.SetLimitedUsage(RuleDefinitions.FeatureLimitedUsage.None);
-                    //a.SetImpactParticle(DatabaseHelper.SpellDefinitions.MagicMissile.EffectDescription.EffectParticleParameters.ImpactParticle);
-                    //a.SetImpactParticleReference(DatabaseHelper.);
+                    a.SetImpactParticleReference(asset_reference);
                     a.DiceByRankTable.Clear();
                     a.DiceByRankTable.AddRange(new List<DiceByRank>
                     {
@@ -220,7 +222,7 @@ namespace SolastaRangerArcanistRangerSubclass
                         new ConditionOperationDescription()
                         {
                             ConditionDefinition = marked_condition,
-                            //Operation = ConditionOperationDescription.ConditionOperation.Remove
+                            Operation = ConditionOperationDescription.ConditionOperation.Remove
                         }
                     );
                 }
